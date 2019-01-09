@@ -1,1 +1,4 @@
 creds.js
+*.png
+\node_modules
+*.json
