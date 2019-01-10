@@ -68,21 +68,21 @@ const DEBUG = true;
 
   console.log('Done!');
   await browser.close();
-  
+
 })();
 
 
 var taskHandlers = {
   "Complete Your Well-being Assessment": function (task, browser, page) {
-    if (DEBUG){
+    if (DEBUG) {
       console.log('Skipping due to DEBUG');
       return;
-    }      
+    }
 
     console.log("This task must be completed manually");
   },
   "Leidos Integrity Pledge": async function (task, browser, page) {
-    if (DEBUG){
+    if (DEBUG) {
       console.log('Skipping due to DEBUG');
       return;
     }
@@ -90,7 +90,7 @@ var taskHandlers = {
     console.log("This task must be completed manually");
   },
   "Register for the Livongo Diabetes Management Program": async function (task, browser, page) {
-    if (DEBUG){
+    if (DEBUG) {
       console.log('Skipping due to DEBUG');
       return;
     }
@@ -98,7 +98,7 @@ var taskHandlers = {
     console.log("This task must be completed manually");
   },
   "Check Your Glucose with Livongo": async function (task, browser, page) {
-    if (DEBUG){
+    if (DEBUG) {
       console.log('Skipping due to DEBUG');
       return;
     }
@@ -106,7 +106,7 @@ var taskHandlers = {
     console.log("This task must be completed manually");
   },
   "150 Minutes of Exercise Per Week": async function (task, browser, page) {
-    if (DEBUG){
+    if (DEBUG) {
       console.log('Skipping due to DEBUG');
       return;
     }
@@ -145,8 +145,53 @@ var taskHandlers = {
       document.getElementsByClassName('item-info-close')[0].click();
     });
 
-  },
+    await page.waitFor(2 * 1000);
 
+  },
+  "Take Time to Recharge": async function (task, browser, page) {
+    if (DEBUG) {
+      console.log('Skipping due to DEBUG');
+      return;
+    }
+
+    console.log("This task must be completed manually");
+
+    console.log('Opening task');
+    await page.evaluate((index) => {
+      document.getElementsByClassName('tracker')[index].click();
+    }, task.index);
+
+    console.log('Waiting for dialog to load...');
+    await page.waitFor(6 * 1000);
+
+    let justJoined = await page.evaluate(() => {
+      let element = document.getElementsByClassName('button-join')[0];
+      if (element == null) {
+        return false;
+      } else {
+        element.click();
+        return true;
+      }
+    });
+
+    if (justJoined) {
+      console.log('Just joined...');
+      await page.waitFor(6 * 1000);
+    }
+
+    await page.evaluate(() => {
+      document.getElementsByClassName('button-track')[0].click();
+    });
+
+    await page.waitFor(2 * 1000);
+
+    await page.evaluate(() => {
+      document.getElementsByClassName('item-info-close')[0].click();
+    });
+
+    await page.waitFor(2 * 1000);
+
+  },
 
 
 };
