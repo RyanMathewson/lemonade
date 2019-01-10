@@ -109,8 +109,24 @@ var taskHandlers = {
   "Understanding the Opioid Epidemic": async function (task, browser, page) {
     console.log("This task must be completed manually");
   },
+  "Learn More About Mission For Life": async function (task, browser, page) {
+    console.log("This task must be completed manually");
+  },
+  "Create a Profile in the Prudential Financial Wellness Center": async function (task, browser, page) {
+    console.log("This task must be completed manually");
+  },
   "Download the Mobile App": async function (task, browser, page) {
     if (DEBUG) {
+      console.log('Skipping due to DEBUG');
+      return;
+    }
+    await SimpleJoinAndTrack(task, browser, page);
+  },
+  "Attend a FREE EAP Wellness Seminar": async function (task, browser, page) {
+    console.log("This task must be completed manually because they may ask for your certificate of completion");
+  },
+  "Connect a Device or App": async function (task, browser, page) {
+    if (!DEBUG) {
       console.log('Skipping due to DEBUG');
       return;
     }
