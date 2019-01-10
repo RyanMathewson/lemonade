@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const CREDS = require('./creds');
+const DEBUG = true;
 
 (async () => {
   const browser = await puppeteer.launch({ headless: false });
@@ -57,7 +58,7 @@ const CREDS = require('./creds');
     }
 
     try {
-      handler(task, browser, page);
+      await handler(task, browser, page);
     } catch (ex) {
       console.error("Error while handling task.  Please provide error.png and a copy of the following error message to the developer.", ex);
       await page.screenshot({ path: 'error.png' });
@@ -66,25 +67,50 @@ const CREDS = require('./creds');
   }
 
   console.log('Done!');
-  //await browser.close();
+  await browser.close();
+  
 })();
 
 
 var taskHandlers = {
   "Complete Your Well-being Assessment": function (task, browser, page) {
+    if (DEBUG){
+      console.log('Skipping due to DEBUG');
+      return;
+    }      
+
     console.log("This task must be completed manually");
   },
   "Leidos Integrity Pledge": async function (task, browser, page) {
+    if (DEBUG){
+      console.log('Skipping due to DEBUG');
+      return;
+    }
+
     console.log("This task must be completed manually");
   },
   "Register for the Livongo Diabetes Management Program": async function (task, browser, page) {
+    if (DEBUG){
+      console.log('Skipping due to DEBUG');
+      return;
+    }
+
     console.log("This task must be completed manually");
   },
   "Check Your Glucose with Livongo": async function (task, browser, page) {
+    if (DEBUG){
+      console.log('Skipping due to DEBUG');
+      return;
+    }
+
     console.log("This task must be completed manually");
   },
   "150 Minutes of Exercise Per Week": async function (task, browser, page) {
-    
+    if (DEBUG){
+      console.log('Skipping due to DEBUG');
+      return;
+    }
+
     console.log('Opening task');
     await page.evaluate((index) => {
       document.getElementsByClassName('tracker')[index].click();
@@ -92,25 +118,25 @@ var taskHandlers = {
 
     console.log('Waiting for dialog to load...');
     await page.waitFor(6 * 1000);
-   
+
     let justJoined = await page.evaluate(() => {
       let element = document.getElementsByClassName('button-join')[0];
-      if(element == null){
+      if (element == null) {
         return false;
-      }else{
+      } else {
         element.click();
         return true;
-      }      
+      }
     });
 
-    if(justJoined){
+    if (justJoined) {
       console.log('Just joined...');
       await page.waitFor(6 * 1000);
     }
 
     await page.evaluate(() => {
       document.getElementById('numericinput').value = 20;
-      //document.getElementsByClassName('button-track')[0].click();
+      document.getElementsByClassName('button-track')[0].click();
     });
 
     await page.waitFor(2 * 1000);
@@ -122,5 +148,5 @@ var taskHandlers = {
   },
 
 
-  
+
 };

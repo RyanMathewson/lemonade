@@ -1,0 +1,2 @@
+node lemonade.js
+pause
