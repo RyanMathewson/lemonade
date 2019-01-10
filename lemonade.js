@@ -74,36 +74,47 @@ const DEBUG = true;
 
 var taskHandlers = {
   "Complete Your Well-being Assessment": function (task, browser, page) {
-    if (DEBUG) {
-      console.log('Skipping due to DEBUG');
-      return;
-    }
-
     console.log("This task must be completed manually");
   },
   "Leidos Integrity Pledge": async function (task, browser, page) {
-    if (DEBUG) {
-      console.log('Skipping due to DEBUG');
-      return;
-    }
-
     console.log("This task must be completed manually");
   },
   "Register for the Livongo Diabetes Management Program": async function (task, browser, page) {
-    if (DEBUG) {
-      console.log('Skipping due to DEBUG');
-      return;
-    }
-
     console.log("This task must be completed manually");
   },
   "Check Your Glucose with Livongo": async function (task, browser, page) {
+    console.log("This task must be completed manually");
+  },
+  "Share Your 2019 Well-Being Resolution": async function (task, browser, page) {
+    console.log("This task must be completed manually");
+  },
+  "Dental Exam": async function (task, browser, page) {
+    console.log("This task must be completed manually");
+  },
+  "Vision Exam": async function (task, browser, page) {
+    console.log("This task must be completed manually");
+  },
+  "Preventive Screenings": async function (task, browser, page) {
+    console.log("This task must be completed manually");
+  },
+  "Teladoc Consultation": async function (task, browser, page) {
+    console.log("This task must be completed manually");
+  },
+  "Condition Management Programs": async function (task, browser, page) {
+    console.log("This task must be completed manually");
+  },
+  "Tobacco Cessation Challenge": async function (task, browser, page) {
+    console.log("This task must be completed manually");
+  },
+  "Understanding the Opioid Epidemic": async function (task, browser, page) {
+    console.log("This task must be completed manually");
+  },
+  "Download the Mobile App": async function (task, browser, page) {
     if (DEBUG) {
       console.log('Skipping due to DEBUG');
       return;
     }
-
-    console.log("This task must be completed manually");
+    await SimpleJoinAndTrack(task, browser, page);
   },
   "150 Minutes of Exercise Per Week": async function (task, browser, page) {
     if (DEBUG) {
@@ -111,28 +122,8 @@ var taskHandlers = {
       return;
     }
 
-    console.log('Opening task');
-    await page.evaluate((index) => {
-      document.getElementsByClassName('tracker')[index].click();
-    }, task.index);
-
-    console.log('Waiting for dialog to load...');
-    await page.waitFor(6 * 1000);
-
-    let justJoined = await page.evaluate(() => {
-      let element = document.getElementsByClassName('button-join')[0];
-      if (element == null) {
-        return false;
-      } else {
-        element.click();
-        return true;
-      }
-    });
-
-    if (justJoined) {
-      console.log('Just joined...');
-      await page.waitFor(6 * 1000);
-    }
+    await OpenTask(task, browser, page);
+    await JoinTask(task, browser, page);
 
     await page.evaluate(() => {
       document.getElementById('numericinput').value = 20;
@@ -146,52 +137,93 @@ var taskHandlers = {
     });
 
     await page.waitFor(2 * 1000);
-
   },
   "Take Time to Recharge": async function (task, browser, page) {
     if (DEBUG) {
       console.log('Skipping due to DEBUG');
       return;
     }
-
-    console.log("This task must be completed manually");
-
-    console.log('Opening task');
-    await page.evaluate((index) => {
-      document.getElementsByClassName('tracker')[index].click();
-    }, task.index);
-
-    console.log('Waiting for dialog to load...');
-    await page.waitFor(6 * 1000);
-
-    let justJoined = await page.evaluate(() => {
-      let element = document.getElementsByClassName('button-join')[0];
-      if (element == null) {
-        return false;
-      } else {
-        element.click();
-        return true;
-      }
-    });
-
-    if (justJoined) {
-      console.log('Just joined...');
-      await page.waitFor(6 * 1000);
-    }
-
-    await page.evaluate(() => {
-      document.getElementsByClassName('button-track')[0].click();
-    });
-
-    await page.waitFor(2 * 1000);
-
-    await page.evaluate(() => {
-      document.getElementsByClassName('item-info-close')[0].click();
-    });
-
-    await page.waitFor(2 * 1000);
-
+    await SimpleJoinAndTrack(task, browser, page);
   },
 
 
 };
+
+
+
+async function GoThroughSlideshow(page, slideCount){
+  for (var i = 0; i < slideCount; i++) {
+    await page.click('#html5Experience > div.PresentationHost > div.PresentationHostRightScroller.PresentationHostArrowHover > div');
+    await page.waitFor(1000);
+  }
+}
+
+
+async function StartQuiz(page){
+  await page.click("#startQuiz");
+  await page.waitFor(1000);
+}
+
+
+async function PickQuizOption(page, option){
+  await page.click("#html5Experience > div.Player2QuizContainer > div:nth-child(" + option + ") > div.Player2QuestionContainerWrapper > div:nth-child(2) > label > input");
+  await page.waitFor(1000);
+  await page.click("#html5Experience > div.Player2QuizContainer > div.Player2NextButtonContainer > div");
+  await page.waitFor(1000);
+  await page.click("#html5Experience > div.Player2QuizContainer > div.Player2NextButtonContainer > div");
+  await page.waitFor(1000);
+}
+
+
+
+
+
+async function OpenTask(task, browser, page) {
+  console.log('Opening task');
+  await page.evaluate((index) => {
+    document.getElementsByClassName('tracker')[index].click();
+  }, task.index);
+
+  console.log('Waiting for dialog to load...');
+  await page.waitFor(6 * 1000);
+}
+
+
+async function JoinTask(task, browser, page) {
+  let justJoined = await page.evaluate(() => {
+    let element = document.getElementsByClassName('button-join')[0];
+    if (element == null) {
+      return false;
+    } else {
+      element.click();
+      return true;
+    }
+  });
+
+  if (justJoined) {
+    console.log('Just joined...');
+    await page.waitFor(6 * 1000);
+  }
+}
+
+
+
+async function SimpleJoinAndTrack(task, browser, page) {
+
+  console.log('Performing simple join and track');
+
+  await OpenTask(task, browser, page);
+  await JoinTask(task, browser, page);
+
+  await page.evaluate(() => {
+    document.getElementsByClassName('button-track')[0].click();
+  });
+
+  await page.waitFor(2 * 1000);
+
+  await page.evaluate(() => {
+    document.getElementsByClassName('item-info-close')[0].click();
+  });
+
+  await page.waitFor(2 * 1000);
+}
