@@ -42,8 +42,8 @@ const DEBUG = true;
     if (title == null)
       continue;
 
-    console.log('Found Task: ' + title);
-    tasks.push({ index: i, title: title });
+    console.log('Found Task ' + i + ': ' + title);
+    tasks.push({ title: title });
   }
 
 
@@ -115,50 +115,44 @@ var taskHandlers = {
   "Create a Profile in the Prudential Financial Wellness Center": async function (task, browser, page) {
     console.log("This task must be completed manually");
   },
+  "Track Your Progress": async function (task, browser, page) {
+    console.log("Done");
+  },
   "Download the Mobile App": async function (task, browser, page) {
-    if (DEBUG) {
-      console.log('Skipping due to DEBUG');
-      return;
-    }
     await SimpleJoinAndTrack(task, browser, page);
   },
   "Attend a FREE EAP Wellness Seminar": async function (task, browser, page) {
     console.log("This task must be completed manually because they may ask for your certificate of completion");
   },
   "Connect a Device or App": async function (task, browser, page) {
-    if (!DEBUG) {
-      console.log('Skipping due to DEBUG');
-      return;
-    }
     await SimpleJoinAndTrack(task, browser, page);
   },
   "150 Minutes of Exercise Per Week": async function (task, browser, page) {
-    if (DEBUG) {
-      console.log('Skipping due to DEBUG');
+    var now = new Date();
+    if (now.getDay() == 0 || now.getDay() == 6) {
+      console.log("Skipping due to weekend");
       return;
     }
 
     await OpenTask(task, browser, page);
     await JoinTask(task, browser, page);
 
+    // Enter time and track
     await page.evaluate(() => {
-      document.getElementById('numericinput').value = 20;
+      document.getElementById('numericinput').value = 30;
       document.getElementsByClassName('button-track')[0].click();
     });
-
     await page.waitFor(2 * 1000);
 
-    await page.evaluate(() => {
-      document.getElementsByClassName('item-info-close')[0].click();
-    });
-
-    await page.waitFor(2 * 1000);
+    await CloseTask(task, browser, page);
   },
   "Take Time to Recharge": async function (task, browser, page) {
-    if (DEBUG) {
-      console.log('Skipping due to DEBUG');
+    var now = new Date();
+    if (now.getDay() == 0 || now.getDay() == 6) {
+      console.log("Skipping due to weekend");
       return;
     }
+
     await SimpleJoinAndTrack(task, browser, page);
   },
 
@@ -167,7 +161,7 @@ var taskHandlers = {
 
 
 
-async function GoThroughSlideshow(page, slideCount){
+async function GoThroughSlideshow(page, slideCount) {
   for (var i = 0; i < slideCount; i++) {
     await page.click('#html5Experience > div.PresentationHost > div.PresentationHostRightScroller.PresentationHostArrowHover > div');
     await page.waitFor(1000);
@@ -175,13 +169,13 @@ async function GoThroughSlideshow(page, slideCount){
 }
 
 
-async function StartQuiz(page){
+async function StartQuiz(page) {
   await page.click("#startQuiz");
   await page.waitFor(1000);
 }
 
 
-async function PickQuizOption(page, option){
+async function PickQuizOption(page, option) {
   await page.click("#html5Experience > div.Player2QuizContainer > div:nth-child(" + option + ") > div.Player2QuestionContainerWrapper > div:nth-child(2) > label > input");
   await page.waitFor(1000);
   await page.click("#html5Experience > div.Player2QuizContainer > div.Player2NextButtonContainer > div");
@@ -192,20 +186,18 @@ async function PickQuizOption(page, option){
 
 
 
-
-
 async function OpenTask(task, browser, page) {
-  console.log('Opening task');
-  await page.evaluate((index) => {
-    document.getElementsByClassName('tracker')[index].click();
-  }, task.index);
-
-  console.log('Waiting for dialog to load...');
+  await page.evaluate((title) => {
+    document.querySelector('[aria-label="' + title + '"]').click();
+  }, task.title);
   await page.waitFor(6 * 1000);
 }
 
 
 async function JoinTask(task, browser, page) {
+  if (DEBUG)
+    return;
+
   let justJoined = await page.evaluate(() => {
     let element = document.getElementsByClassName('button-join')[0];
     if (element == null) {
@@ -223,23 +215,27 @@ async function JoinTask(task, browser, page) {
 }
 
 
-
-async function SimpleJoinAndTrack(task, browser, page) {
-
-  console.log('Performing simple join and track');
-
-  await OpenTask(task, browser, page);
-  await JoinTask(task, browser, page);
+async function SimpleTrack(task, browser, page) {
+  if (DEBUG)
+    return;
 
   await page.evaluate(() => {
     document.getElementsByClassName('button-track')[0].click();
   });
+}
 
-  await page.waitFor(2 * 1000);
-
+async function CloseTask(task, browser, page) {
   await page.evaluate(() => {
     document.getElementsByClassName('item-info-close')[0].click();
   });
-
   await page.waitFor(2 * 1000);
+}
+
+
+async function SimpleJoinAndTrack(task, browser, page) {
+  console.log('Performing simple join and track');
+  await OpenTask(task, browser, page);
+  await JoinTask(task, browser, page);
+  await SimpleTrack(task, browser, page);
+  await CloseTask(task, browser, page);
 }
