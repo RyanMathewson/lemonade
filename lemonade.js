@@ -1,6 +1,12 @@
 const puppeteer = require('puppeteer');
 const CREDS = require('./creds');
-const DEBUG = true;
+var DEBUG = true;
+
+if(process.argv[2] == 'prod'){
+  DEBUG = false;
+}
+
+console.log("DEBUG: " + DEBUG);
 
 (async () => {
   const browser = await puppeteer.launch({ headless: false });
@@ -21,6 +27,13 @@ const DEBUG = true;
   console.log('Letting page load...');
   await page.waitForNavigation();
   await page.waitFor(4 * 1000);
+
+  // Check if its the weekend
+  var now = new Date();
+  if (now.getDay() == 0 || now.getDay() == 6) {
+    console.log("Exiting due to weekend");
+    return;
+  }
 
   // Enumerate active tasks 'tracker'
   console.log('Finding tasks');
