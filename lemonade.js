@@ -28,13 +28,6 @@ console.log("DEBUG: " + DEBUG);
   await page.waitForNavigation();
   await page.waitFor(4 * 1000);
 
-  // Check if its the weekend
-  var now = new Date();
-  if (now.getDay() == 0 || now.getDay() == 6) {
-    console.log("Exiting due to weekend");
-    return;
-  }
-
   // Enumerate active tasks 'tracker'
   console.log('Finding tasks');
   let listLength = await page.evaluate((sel) => {
@@ -141,11 +134,6 @@ var taskHandlers = {
     await SimpleJoinAndTrack(task, browser, page);
   },
   "150 Minutes of Exercise Per Week": async function (task, browser, page) {
-    var now = new Date();
-    if (now.getDay() == 0 || now.getDay() == 6) {
-      console.log("Skipping due to weekend");
-      return;
-    }
 
     await OpenTask(task, browser, page);
     await JoinTask(task, browser, page);
