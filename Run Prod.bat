@@ -1,1 +1,1 @@
-node lemonade.js prod
+node lemonade.js prod > prod_log.txt

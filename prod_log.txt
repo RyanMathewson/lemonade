@@ -1,0 +1,58 @@
+DEBUG: false
+Logging in
+Letting page load...
+Finding tasks
+listLength: 21
+Found Task 0: Take Time to Recharge
+Found Task 1: 150 Minutes of Exercise Per Week
+Found Task 2: Share Your 2019 Well-Being Resolution
+Found Task 3: No caffeine in the evening
+Found Task 4: Teladoc Consultation
+Found Task 5: Vision Exam
+Found Task 6: Preventive Screenings
+Found Task 7: Dental Exam
+Found Task 9: Exercise & Fitness
+Found Task 10: Healthy Weight
+Found Task 11: Sleep
+Found Task 12: Register for the Livongo Diabetes Management Program
+Found Task 13: Check Your Glucose with Livongo
+Found Task 14: Condition Management Programs
+Found Task 15: Tobacco Cessation Challenge
+Found Task 16: Create a Profile in the Prudential Financial Wellness Center
+Found Task 17: Learn More about Resources for You
+Found Task 18: Take the Well-Being Assessment
+Found Task 19: Complete Biometric Screening
+Found Task 20: Track Your Progress
+Processing task: Take Time to Recharge
+Performing simple join and track
+Processing task: 150 Minutes of Exercise Per Week
+Processing task: Share Your 2019 Well-Being Resolution
+This task must be completed manually
+Processing task: No caffeine in the evening
+Processing task: Teladoc Consultation
+This task must be completed manually
+Processing task: Vision Exam
+This task must be completed manually
+Processing task: Preventive Screenings
+This task must be completed manually
+Processing task: Dental Exam
+This task must be completed manually
+Processing task: Exercise & Fitness
+Processing task: Healthy Weight
+Processing task: Sleep
+Processing task: Register for the Livongo Diabetes Management Program
+This task must be completed manually
+Processing task: Check Your Glucose with Livongo
+This task must be completed manually
+Processing task: Condition Management Programs
+This task must be completed manually
+Processing task: Tobacco Cessation Challenge
+This task must be completed manually
+Processing task: Create a Profile in the Prudential Financial Wellness Center
+This task must be completed manually
+Processing task: Learn More about Resources for You
+Processing task: Take the Well-Being Assessment
+Processing task: Complete Biometric Screening
+Processing task: Track Your Progress
+Done
+Done!

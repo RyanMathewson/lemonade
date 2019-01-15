@@ -1,2 +1,2 @@
-node lemonade.js
+node lemonade.js > debug_log.txt
 pause

@@ -13,7 +13,7 @@ console.log("DEBUG: " + DEBUG);
   const page = await browser.newPage();
 
   // Browse to page
-  await page.goto('https://limeade.com/brandedlogin.aspx?redirect=0&e=Limeade', { waitUntil: 'networkidle2' });
+  await page.goto(CREDS.loginURL, { waitUntil: 'networkidle2' });
 
   // Enter login credentials
   await page.click('#ctl00_content_SiteThemeContentFragmentPage1_fragment_3526_ctl01_ctl00_LoginForm1_ctl06_username');
@@ -34,8 +34,6 @@ console.log("DEBUG: " + DEBUG);
     return document.getElementsByClassName(sel).length;
   }, 'tracker');
 
-  console.log('listLength: ' + listLength);
-
   var tasks = [];
 
   for (let i = 0; i < listLength; i++) {
@@ -48,14 +46,14 @@ console.log("DEBUG: " + DEBUG);
     if (title == null)
       continue;
 
-    console.log('Found Task ' + i + ': ' + title);
+    console.log('Found Task ' + ': ' + title);
     tasks.push({ title: title });
   }
 
 
   for (let i = 0; i < tasks.length; i++) {
     var task = tasks[i];
-    console.log('Processing task: ' + task.title);
+    console.log('Processing Task: ' + task.title);
 
     var handler = taskHandlers[task.title];
     if (handler == null) {
@@ -122,7 +120,7 @@ var taskHandlers = {
     console.log("This task must be completed manually");
   },
   "Track Your Progress": async function (task, browser, page) {
-    console.log("Done");
+    console.log("No Action Required");
   },
   "Download the Mobile App": async function (task, browser, page) {
     await SimpleJoinAndTrack(task, browser, page);
